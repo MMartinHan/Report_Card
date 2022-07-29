@@ -1,22 +1,40 @@
 from tkinter import *
 from tkinter import ttk
+import tkinter
 from PIL import Image, ImageTk
+from numpy import place
 
 
 class Ventana(Frame):
-    
+
+  
     root = Tk()
     root.wm_title("Registro de Notas")
     root.geometry("500x500")
     img1 = Image.open("img/espe.png")
-    img1 = img1.resize((600, 200))
+    img1 = img1.resize((520, 200))
     img2 = ImageTk.PhotoImage(img1)
     label1 = Label(image=img2)
     label1.image = img2
     label1.pack()
-    root.mainloop()
+    boton = Button(root, text="Registrar Estudiante ",font=("Arial",12)).place(x=75, y=450)
+    boton1 = Button(root, text="Notas ",font=("Arial",12)).place(x=375, y=450)
+    buton2 = Button(root, text="Ver Notas ",font=("Arial",12)).place(x=575, y=450)
+    treeview = ttk.Treeview(columns=("Parcial1","Parcial2","Parcial3"))
+    treeview.heading("#0", text="Nombre")
+    treeview.heading("Parcial1", text="Parcial1")
+    treeview.heading("Parcial2", text="Parcial2")
+    treeview.heading("Parcial3", text="Parcial3")
+    treeview.pack()
+    
+ 
+    root.geometry("800x500")
 
-        
+    root.resizable(width=False , height=False)
+       
+    root.mainloop()
+    
+
     def fNuevo(self):         
         pass
     
@@ -31,6 +49,13 @@ class Ventana(Frame):
 
     def fCancelar(self):
         pass
+
+   
+
+
+
+
+
 
     '''def create_widgets(self):
         frame1 = Frame(self, bg="#bfdaff")
@@ -74,5 +99,5 @@ class Ventana(Frame):
         self.grid.heading("col2", text="Country Name", anchor=CENTER)
         self.grid.heading("col3", text="Capital", anchor=CENTER)
         self.grid.heading("col4", text="Currency Code", anchor=CENTER)        
-        self.grid.place(x=247,y=0,width=420, height=259)'''
-        
+        self.grid.place(x=247,y=0,width=420, height=259)
+        pass'''
