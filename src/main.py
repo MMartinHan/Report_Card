@@ -1,6 +1,7 @@
 from tkinter import *
 from venv import create
 from ventana import *
+import conection as cnct
 
 
 def main():
@@ -13,4 +14,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    cnct.obtener_nrc()
     

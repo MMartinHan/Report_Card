@@ -4,7 +4,8 @@ from tkinter import ttk
 import tkinter
 from PIL import Image, ImageTk
 from numpy import place
-import ventana as v
+import ventana as vnt
+import conection as cnct
 
 
 class VentanaEstudiante(Frame):
@@ -71,7 +72,7 @@ class VentanaEstudiante(Frame):
         self.master.destroy()
         root = Tk()
         root.wm_title("Registro de Notas")
-        v.Ventana(root)
+        vnt.Ventana(root)
         root.mainloop()
 
     def fNuevo(self):
@@ -81,7 +82,10 @@ class VentanaEstudiante(Frame):
     def fGuardar(self):
         id = self.txtID.get()
         name = self.txtName.get()
+        name = name.upper()
         lastName = self.txtlastName.get()
+        lastName = lastName.upper()
+        cnct.insert_student(id,name,lastName)
         self.grid.insert("", 0, text=id, values=(name, lastName))
         self.txtID.delete(0, END)
         self.txtName.delete(0, END)
