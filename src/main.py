@@ -4,9 +4,10 @@ from ventana import *
 
 
 def main():
-    mi_app = Ventana()
-    
-        
+    root = Tk()
+    root.wm_title("Registro de Notas")
+    Ventana(root)
+    root.mainloop()
 
 
 
