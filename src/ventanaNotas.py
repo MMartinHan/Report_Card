@@ -19,9 +19,8 @@ class VentanaNotas(Frame):
         self.pack()
         
 
-
     def imagen(self):
-        img1 = Image.open("img/espe.png")
+        img1 = Image.open("espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -73,7 +72,16 @@ class VentanaNotas(Frame):
         self.btnCancelar=Button(frame2,text="Cancelar", command=self.fCancelar, bg="red", fg="white")
         self.btnCancelar.place(x=85,y=315,width=60, height=30) 
         self.btnRegresar=Button(frame2,text="Regresar", command=self.fRegresar, bg="green", fg="white")
-        self.btnRegresar.place(x=155,y=315,width=60, height=30)    
+        self.btnRegresar.place(x=155,y=315,width=60, height=30)   
+        
+        self.btnNuevo=Button(text="Buscar", bg="blue", fg="white")
+        self.btnNuevo.place(x=400,y=425,width=80, height=30 )        
+        self.btnModificar=Button(text="Modificar", bg="blue", fg="white")
+        self.btnModificar.place(x=500,y=425,width=80, height=30)                
+        self.btnEliminar=Button(text="Eliminar", bg="blue", fg="white")
+        self.btnEliminar.place(x=600,y=425,width=80, height=30)   
+        
+        
         self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5"))        
         self.grid.column("#0",width=50)
         self.grid.column("col1",width=60, anchor=CENTER)
@@ -90,9 +98,6 @@ class VentanaNotas(Frame):
         self.grid.place(x=250,y=0,width=600, height=250)
         
 
-    
-        
-  
     def fNuevo(self):         
         pass
     

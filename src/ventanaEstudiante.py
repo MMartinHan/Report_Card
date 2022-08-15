@@ -15,13 +15,14 @@ class VentanaEstudiante(Frame):
         super().__init__(master,width=600,height=260)
         self.imagen()
         self.createwidgets()
+        self.fMostrarDatos()
         self.master = master
         self.pack()
         
 
 
     def imagen(self):
-        img1 = Image.open("img/espe.png")
+        img1 = Image.open("espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -31,7 +32,7 @@ class VentanaEstudiante(Frame):
     def createwidgets(self):
         frame1 = Frame(self, bg="#bfdaff")
         frame1.place(x=0,y=0,width=93, height=259)        
-        self.btnNuevo=Button(frame1,text="Nuevo", command=self.fNuevo, bg="blue", fg="white")
+        self.btnNuevo=Button(frame1,text="Buscar", command=self.fBuscar, bg="blue", fg="white")
         self.btnNuevo.place(x=5,y=50,width=80, height=30 )        
         self.btnModificar=Button(frame1,text="Modificar", command=self.fModificar, bg="blue", fg="white")
         self.btnModificar.place(x=5,y=90,width=80, height=30)                
@@ -53,7 +54,7 @@ class VentanaEstudiante(Frame):
         lbl3.place(x=3,y=105)        
         self.txtlastName=Entry(frame2)      
         self.txtlastName.place(x=3,y=125,width=100, height=20)        
-        self.btnGuardar=Button(frame2,text="Guardar", command=self.fGuardar, bg="green", fg="white")
+        self.btnGuardar=Button(frame2,text="Guardar", command=self.fGuardar,bg="green", fg="white")
         self.btnGuardar.place(x=10,y=180,width=60, height=30)
         self.btnCancelar=Button(frame2,text="Cancelar", command=self.fCancelar, bg="red", fg="white")
         self.btnCancelar.place(x=80,y=180,width=60, height=30)        
@@ -78,7 +79,27 @@ class VentanaEstudiante(Frame):
     def fNuevo(self):
         pass
 
-    
+    def fMostrarDatos(self):
+        try:
+            with open("estudiante.txt","r") as archivo:
+                lineas = archivo.readlines()
+                for linea in lineas:
+                    datos = linea.split(",")
+                    self.grid.insert("",0,text=datos[0], values=(datos[1],datos[2]))
+        except FileNotFoundError as e:
+            return False
+        except IOError as e:
+            return False
+          
+    def fBuscar(self):
+
+        id = self.txtID.get()
+        name : str
+        name = cnct.buscar_nombre(id)
+        self.txtName.insert(0, name)
+        lastName = cnct.buscar_apellido(id)
+        self.txtlastName.insert(0, lastName)       
+        
     def fGuardar(self):
         id = self.txtID.get()
         name = self.txtName.get()
@@ -86,17 +107,32 @@ class VentanaEstudiante(Frame):
         lastName = self.txtlastName.get()
         lastName = lastName.upper()
         cnct.insert_student(id,name,lastName)
+        cnct.guardar_datos_txt(id,name,lastName)
         self.grid.insert("", 0, text=id, values=(name, lastName))
         self.txtID.delete(0, END)
         self.txtName.delete(0, END)
         self.txtlastName.delete(0, END)
         self.txtID.focus()
+        
 
     
-    def fModificar(self):        
-        pass
+    def fModificar(self):  
+        id = self.txtID.get()
+        name = self.txtName.get()
+        name = name.upper()
+        lastName = self.txtlastName.get()
+        lastName = lastName.upper()
+        cnct.modificar_estudiante(id,name,lastName)
+        self.grid.insert("", 0, text=id, values=(name, lastName))
+        self.txtID.delete(0, END)
+        self.txtName.delete(0, END)
+        self.txtlastName.delete(0, END)
+        self.txtID.focus()      
+        
     
     def fEliminar(self):
+        id = self.txtID.get()
+        cnct.eliminar_estudiante(id)
         pass
 
     def fCancelar(self):
@@ -108,5 +144,6 @@ class VentanaEstudiante(Frame):
         self.txtlastName.delete(0, END)
         self.txtID.focus()
         
+ 
 
    
