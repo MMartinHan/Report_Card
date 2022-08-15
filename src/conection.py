@@ -19,7 +19,9 @@ def obtener_nrc():
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     data = supabase.table("materia").select("nrc").execute()
-    assert len(data.data) > 0
+    data = supabase.table("materia").select("nrc").execute().json()
+    data = re.findall('[0-9]+',data)
+    return data
 
  
 def guardar_datos_txt(id: int, first_name: str, last_name: str):
@@ -33,9 +35,7 @@ def modificar_estudiante(id: int , first_name: str, last_name: str):
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     supabase.table('estudiante').update({"id": id, "first_name": first_name, "last_name": last_name}).eq("id",id).execute()
-    data = supabase.table("materia").select("nrc").execute().json()
-    data = re.findall('[0-9]+',data)
-    return data
+    
 
 def insert_nota(id: int, estudiante: str, nrc: int, nota: float, descripcion: str, parcial: int):
     url: str = config("SUPABASE_URL")
@@ -71,6 +71,64 @@ def eliminar_estudiante(id: int):
     supabase.table('estudiante').delete().eq("id",id).execute()
 
 
-
-
+def modificar_nota(idNota : int ,nrc: int, nota: float, descripcion: str, parcial: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    supabase.table('notas').update({"id_not": idNota,"materia_nrc": nrc, "nota_valor": nota, "nota_descripcion": descripcion, "numero_parcial": parcial}).eq("id_not",idNota).execute() 
     
+def buscar_idEstudiante(id: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    supabase.table("notas").select("*").eq("id_not",id).execute()
+    for item  in supabase.table("notas").select("*").eq("id_not",id).execute().data:
+        return item["estudiante_id"]
+
+def buscar_nrc(id: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    supabase.table("notas").select("*").eq("id_not",id).execute()
+    for item  in supabase.table("notas").select("*").eq("id_not",id).execute().data:
+        return item["materia_nrc"]
+
+def buscar_notaValor(id: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    supabase.table("notas").select("*").eq("id_not",id).execute()
+    for item  in supabase.table("notas").select("*").eq("id_not",id).execute().data:
+        return item["nota_valor"]
+
+def buscar_notaDescripcion(id: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    supabase.table("notas").select("*").eq("id_not",id).execute()
+    for item  in supabase.table("notas").select("*").eq("id_not",id).execute().data:
+        return item["nota_descripcion"]
+
+def buscar_parcial(id: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    supabase.table("notas").select("*").eq("id_not",id).execute()
+    for item  in supabase.table("notas").select("*").eq("id_not",id).execute().data:
+        return item["numero_parcial"]
+
+
+def recuperar_idEstudinte():
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    id_est =[]
+    for item  in supabase.table("estudiante").select("*").execute().data:
+        id_est.append(item["id"])
+    return id_est
+    
+def eliminar_nota(id: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    supabase.table('notas').delete().eq("id_not",id).execute()
