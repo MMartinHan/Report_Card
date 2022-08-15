@@ -15,12 +15,13 @@ class VentanaNotas(Frame):
         super().__init__(master,width=900,height=350)
         self.imagen()
         self.createwidgets()
+        self.fMostrar()
         self.master = master
         self.pack()
         
 
     def imagen(self):
-        img1 = Image.open("espe.png")
+        img1 = Image.open("img/espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -33,14 +34,19 @@ class VentanaNotas(Frame):
 
         lbl1 = Label(frame2,text="ID.Nota ")
         lbl1.place(x=10,y=5)        
-        self.txtIDnota=Entry(frame2)
+        self.txtIDnota=Entry(frame2,justify="center")
         self.txtIDnota.place(x=25,y=25,width=140, height=20)  
 
 
         lbl2 = Label(frame2,text="ID.ESTUDIANTE ")
         lbl2.place(x=10,y=55)
+<<<<<<< HEAD
         list_ste = cnct.recuperar_idEstudinte()       
         self.cmbEstudiante = ttk.Combobox(frame2,state="readonly",values=list_ste, justify=CENTER)
+=======
+        list_ste=cnct.recuperar_idEstudiante()        
+        self.cmbEstudiante = ttk.Combobox(frame2,width=10,state="readonly",values=list_ste, justify=CENTER)
+>>>>>>> 6c5c475dd2b3cc4ff82ce607faa4bfbe281640c4
         self.cmbEstudiante.place(x=25,y=75,width=140, height=20)  
 
 
@@ -59,7 +65,7 @@ class VentanaNotas(Frame):
 
         lbl5 = Label(frame2,text="NOTA_VALOR ")
         lbl5.place(x=10,y=205)        
-        self.txtNota_Valor=Entry(frame2)      
+        self.txtNota_Valor=Entry(frame2,justify=CENTER)      
         self.txtNota_Valor.place(x=25,y=230,width=140, height=20)   
 
 
@@ -86,22 +92,27 @@ class VentanaNotas(Frame):
         
         self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5"))        
         self.grid.column("#0",width=50)
-        self.grid.column("col1",width=60, anchor=CENTER)
+        self.grid.column("col1",width=90, anchor=CENTER)
         self.grid.column("col2",width=90, anchor=CENTER)
         self.grid.column("col3",width=90, anchor=CENTER)
-        self.grid.column("col4",width=90, anchor=CENTER)   
-        self.grid.column("col5",width=150, anchor=CENTER)  
-        self.grid.heading("#0", text="ID.N.", anchor=CENTER)
-        self.grid.heading("col1", text="ID.E.", anchor=CENTER)
-        self.grid.heading("col2", text="NRC.M.", anchor=CENTER)
-        self.grid.heading("col3", text="PARCIAL", anchor=CENTER)
-        self.grid.heading("col4", text="NOTA.VALOR", anchor=CENTER)
-        self.grid.heading("col5", text="DESCRIPCION", anchor=CENTER)     
+        self.grid.column("col4",width=110, anchor=CENTER)   
+        self.grid.column("col5",width=60, anchor=CENTER)  
+        self.grid.heading("#0", text="ID NOTA", anchor=CENTER)
+        self.grid.heading("col1", text="ID ESTUDIANTE", anchor=CENTER)
+        self.grid.heading("col2", text="NRC MATERIA", anchor=CENTER)
+        self.grid.heading("col3", text="NOTA VALOR", anchor=CENTER)
+        self.grid.heading("col4", text="DESCRIPCION", anchor=CENTER)
+        self.grid.heading("col5", text="PARCIAL", anchor=CENTER)     
         self.grid.place(x=250,y=0,width=600, height=250)
         
 
     def fNuevo(self):         
         pass
+    
+    def fMostrar(self):
+        id_not,estudiante_id,materia_nrc,nota_valor,nota_descripcion,numero_parcial = cnct.actualizar_notas()
+        for i in range(len(id_not)):
+            self.grid.insert("",0,text=id_not[i],values=(estudiante_id[i],materia_nrc[i],nota_valor[i],nota_descripcion[i],numero_parcial[i]))
     
     def fGuardar(self):
         Id_Nota = self.txtIDnota.get()
@@ -115,14 +126,18 @@ class VentanaNotas(Frame):
         cnct.insert_nota(Id_Nota,Id_Estudiante,nrc,Nota_Valor,Nota_Descripcion,Parcial)
         
         #TABLA
-        self.grid.insert("", 0, text=Id_Nota, values=(Id_Estudiante,nrc,Parcial,Nota_Valor,Nota_Descripcion))
+        self.grid.delete(*self.grid.get_children())
+        self.fMostrar()
         self.txtIDnota.delete(0,END)
         self.cmbEstudiante.set(' ')
         self.cmbNrc.set(' ')
         self.cmbParcial.set(' ')
         self.txtNota_Valor.delete(0,END)
         self.comboNota_Descripcion.set(' ')
+<<<<<<< HEAD
         self.txtIDnota.focus()
+=======
+>>>>>>> 6c5c475dd2b3cc4ff82ce607faa4bfbe281640c4
 
     def fRegresar(self):
         self.master.destroy()
@@ -186,12 +201,23 @@ class VentanaNotas(Frame):
         Id_Nota = self.txtIDnota.get()
         Id_Estudiante = self.cmbEstudiante.get()
         Nota_Valor = self.txtNota_Valor.get()
+<<<<<<< HEAD
         self.txtIDnota.delete(0,END)
         self.cmbEstudiante.set(' ')
         self.cmbNrc.set(' ')
         self.txtNota_Valor.delete(0,END)
         self.cmbParcial.set(' ')
         self.comboNota_Descripcion.set(' ')
+=======
+        Nota_Descripcion = self.txtNota_Descripcion.get()
+        self.txtIDnota.set('')
+        self.txtIDestudiante.set('')
+        self.txtNRC.set('')
+        self.txtParcial.set('')
+        self.txtNota_Valor.set('')
+        self.txtNota_Descripcion.set('')
+>>>>>>> 6c5c475dd2b3cc4ff82ce607faa4bfbe281640c4
         self.txtIDnota.focus()
 
+    
    

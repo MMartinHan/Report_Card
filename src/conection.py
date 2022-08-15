@@ -1,5 +1,3 @@
-from gettext import find
-from tokenize import Double
 from decouple import config
 from supabase import create_client, Client
 import re
@@ -22,8 +20,11 @@ def obtener_nrc():
     data = supabase.table("materia").select("nrc").execute().json()
     data = re.findall('[0-9]+',data)
     return data
+<<<<<<< HEAD
+=======
 
- 
+>>>>>>> 6c5c475dd2b3cc4ff82ce607faa4bfbe281640c4
+
 def guardar_datos_txt(id: int, first_name: str, last_name: str):
     archivo = open("estudiante.txt","w")
     archivo.write(str(id)+","+first_name+","+last_name+"\n")
@@ -69,6 +70,7 @@ def eliminar_estudiante(id: int):
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     supabase.table('estudiante').delete().eq("id",id).execute()
+<<<<<<< HEAD
 
 
 def modificar_nota(idNota : int ,nrc: int, nota: float, descripcion: str, parcial: int):
@@ -76,6 +78,50 @@ def modificar_nota(idNota : int ,nrc: int, nota: float, descripcion: str, parcia
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     supabase.table('notas').update({"id_not": idNota,"materia_nrc": nrc, "nota_valor": nota, "nota_descripcion": descripcion, "numero_parcial": parcial}).eq("id_not",idNota).execute() 
+=======
+    
+
+def actualizar ():
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    id = []
+    nombre = []
+    apellido = []
+    for item  in supabase.table("estudiante").select("*").execute().data:
+        id.append(item["id"])
+        nombre.append(item["first_name"])
+        apellido.append(item["last_name"])
+    return id, nombre, apellido
+
+def recuperar_idEstudiante():
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    id_est = []
+    for item  in supabase.table("estudiante").select("*").execute().data:
+        id_est.append(item["id"])
+    return id_est
+
+def actualizar_notas():
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    id_not = []
+    estuadiante_id = []
+    materia_nrc = []
+    nota_valor = []
+    nota_descripcion = []
+    numero_parcial = []
+    for item  in supabase.table("notas").select("*").execute().data:
+        id_not.append(item["id_not"])
+        estuadiante_id.append(item["estudiante_id"])
+        materia_nrc.append(item["materia_nrc"])
+        nota_valor.append(item["nota_valor"])
+        nota_descripcion.append(item["nota_descripcion"])
+        numero_parcial.append(item["numero_parcial"])
+    return id_not,estuadiante_id,materia_nrc,nota_valor,nota_descripcion,numero_parcial
+>>>>>>> 6c5c475dd2b3cc4ff82ce607faa4bfbe281640c4
     
 def buscar_idEstudiante(id: int):
     url: str = config("SUPABASE_URL")
