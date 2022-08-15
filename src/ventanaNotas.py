@@ -44,9 +44,10 @@ class VentanaNotas(Frame):
 
 
         lbl3 = Label(frame2,text="NRC_MATERIA ")
+        lista_nrc= cnct.obtener_nrc()
         lbl3.place(x=10,y=105)        
-        self.txtNRC=Entry(frame2)      
-        self.txtNRC.place(x=25,y=125,width=140, height=20)
+        self.cmbNrc=ttk.Combobox(frame2,width=10,state="readonly",values=lista_nrc, justify=CENTER)
+        self.cmbNrc.place(x=25,y=125,width=140, height=20)      
 
 
         lbl4 = Label(frame2,text="PARCIAL ")
@@ -104,15 +105,20 @@ class VentanaNotas(Frame):
     def fGuardar(self):
         Id_Nota = self.txtIDnota.get()
         Id_Estudiante = self.txtIDestudiante.get()
-        NRC_Materia = self.txtNRC.get()
-        Parcial = self.txtParcial.get()
+        nrc = self.cmbNrc.get()
+        Parcial = self.cmbParcial.get()
         Nota_Valor = self.txtNota_Valor.get()
         Nota_Descripcion = self.comboNota_Descripcion.get()
-        self.grid.insert("", 0, text=Id_Nota, values=(Id_Estudiante,NRC_Materia,Parcial,Nota_Valor,Nota_Descripcion))
+        
+        #base de datos
+        cnct.insert_nota(Id_Nota,Id_Estudiante,nrc,Nota_Valor,Nota_Descripcion,Parcial)
+        
+        #TABLA
+        self.grid.insert("", 0, text=Id_Nota, values=(Id_Estudiante,nrc,Parcial,Nota_Valor,Nota_Descripcion))
         self.txtIDnota.delete(0,END)
         self.txtIDestudiante.delete(0,END)
-        self.txtNRC.delete(0,END)
-        self.txtParcial.delete(0,END)
+        self.cmbNrc.delete(0,END)
+        self.cmbParcial.delete(0,END)
         self.txtNota_Valor.delete(0,END)
         self.txtNota_Descripcion.delete(0,END)
         self.txtIDnota.focus()

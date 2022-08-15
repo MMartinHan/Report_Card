@@ -17,4 +17,4 @@ if __name__ == "__main__":
     #cnct.obtener_nrc()
     
     
-    
+
