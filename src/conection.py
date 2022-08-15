@@ -1,5 +1,3 @@
-from gettext import find
-from tokenize import Double
 from decouple import config
 from supabase import create_client, Client
 import re
@@ -19,9 +17,11 @@ def obtener_nrc():
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     data = supabase.table("materia").select("nrc").execute()
-    assert len(data.data) > 0
+    data = supabase.table("materia").select("nrc").execute().json()
+    data = re.findall('[0-9]+',data)
+    return data
 
- 
+
 def guardar_datos_txt(id: int, first_name: str, last_name: str):
     archivo = open("estudiante.txt","w")
     archivo.write(str(id)+","+first_name+","+last_name+"\n")
@@ -33,9 +33,7 @@ def modificar_estudiante(id: int , first_name: str, last_name: str):
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     supabase.table('estudiante').update({"id": id, "first_name": first_name, "last_name": last_name}).eq("id",id).execute()
-    data = supabase.table("materia").select("nrc").execute().json()
-    data = re.findall('[0-9]+',data)
-    return data
+    
 
 def insert_nota(id: int, estudiante: str, nrc: int, nota: float, descripcion: str, parcial: int):
     url: str = config("SUPABASE_URL")
@@ -69,8 +67,28 @@ def eliminar_estudiante(id: int):
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     supabase.table('estudiante').delete().eq("id",id).execute()
+    
 
+def actualizar ():
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    id = []
+    nombre = []
+    apellido = []
+    for item  in supabase.table("estudiante").select("*").execute().data:
+        id.append(item["id"])
+        nombre.append(item["first_name"])
+        apellido.append(item["last_name"])
+    return id, nombre, apellido
 
-
+def recuperar_idEstudiante():
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    id_est = []
+    for item  in supabase.table("estudiante").select("*").execute().data:
+        id_est.append(item["id"])
+    return id_est
 
     

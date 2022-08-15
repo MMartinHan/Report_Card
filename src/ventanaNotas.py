@@ -20,7 +20,7 @@ class VentanaNotas(Frame):
         
 
     def imagen(self):
-        img1 = Image.open("espe.png")
+        img1 = Image.open("img/espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -33,14 +33,15 @@ class VentanaNotas(Frame):
 
         lbl1 = Label(frame2,text="ID.Nota ")
         lbl1.place(x=10,y=5)        
-        self.txtIDnota=Entry(frame2)
+        self.txtIDnota=Entry(frame2,justify="center")
         self.txtIDnota.place(x=25,y=25,width=140, height=20)  
 
 
         lbl2 = Label(frame2,text="ID.ESTUDIANTE ")
-        lbl2.place(x=10,y=55)        
-        self.txtIDestudiante=Entry(frame2)
-        self.txtIDestudiante.place(x=25,y=75,width=140, height=20)  
+        lbl2.place(x=10,y=55)
+        list_ste=cnct.recuperar_idEstudiante()        
+        self.cmbEstudiante = ttk.Combobox(frame2,width=10,state="readonly",values=list_ste, justify=CENTER)
+        self.cmbEstudiante.place(x=25,y=75,width=140, height=20)  
 
 
         lbl3 = Label(frame2,text="NRC_MATERIA ")
@@ -58,7 +59,7 @@ class VentanaNotas(Frame):
 
         lbl5 = Label(frame2,text="NOTA_VALOR ")
         lbl5.place(x=10,y=205)        
-        self.txtNota_Valor=Entry(frame2)      
+        self.txtNota_Valor=Entry(frame2,justify=CENTER)      
         self.txtNota_Valor.place(x=25,y=230,width=140, height=20)   
 
 
@@ -104,7 +105,7 @@ class VentanaNotas(Frame):
     
     def fGuardar(self):
         Id_Nota = self.txtIDnota.get()
-        Id_Estudiante = self.txtIDestudiante.get()
+        Id_Estudiante = self.cmbEstudiante.get()
         nrc = self.cmbNrc.get()
         Parcial = self.cmbParcial.get()
         Nota_Valor = self.txtNota_Valor.get()
@@ -115,12 +116,12 @@ class VentanaNotas(Frame):
         
         #TABLA
         self.grid.insert("", 0, text=Id_Nota, values=(Id_Estudiante,nrc,Parcial,Nota_Valor,Nota_Descripcion))
-        self.txtIDnota.delete(0,END)
-        self.txtIDestudiante.delete(0,END)
-        self.cmbNrc.delete(0,END)
-        self.cmbParcial.delete(0,END)
-        self.txtNota_Valor.delete(0,END)
-        self.txtNota_Descripcion.delete(0,END)
+        self.txtIDnota.set('')
+        self.cmbEstudiante.set('')
+        self.cmbNrc.set('')
+        self.cmbParcial.set('')
+        self.txtNota_Valor.set('')
+        self.txtNota_Descripcion.set('')
         self.txtIDnota.focus()
 
     def fRegresar(self):
@@ -143,12 +144,13 @@ class VentanaNotas(Frame):
         Parcial = self.txtParcial.get()
         Nota_Valor = self.txtNota_Valor.get()
         Nota_Descripcion = self.txtNota_Descripcion.get()
-        self.txtIDnota.delete(0,END)
-        self.txtIDestudiante.delete(0,END)
-        self.txtNRC.delete(0,END)
-        self.txtParcial.delete(0,END)
-        self.txtNota_Valor.delete(0,END)
-        self.txtNota_Descripcion.delete(0,END)
+        self.txtIDnota.set('')
+        self.txtIDestudiante.set('')
+        self.txtNRC.set('')
+        self.txtParcial.set('')
+        self.txtNota_Valor.set('')
+        self.txtNota_Descripcion.set('')
         self.txtIDnota.focus()
 
+    
    

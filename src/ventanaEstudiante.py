@@ -22,7 +22,7 @@ class VentanaEstudiante(Frame):
 
 
     def imagen(self):
-        img1 = Image.open("espe.png")
+        img1 = Image.open("img/espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -80,17 +80,10 @@ class VentanaEstudiante(Frame):
         pass
 
     def fMostrarDatos(self):
-        try:
-            with open("estudiante.txt","r") as archivo:
-                lineas = archivo.readlines()
-                for linea in lineas:
-                    datos = linea.split(",")
-                    self.grid.insert("",0,text=datos[0], values=(datos[1],datos[2]))
-        except FileNotFoundError as e:
-            return False
-        except IOError as e:
-            return False
-          
+        id,nombre,apellido = cnct.actualizar()
+        for i in range(len(id)):
+            self.grid.insert("", 0, text=id[i], values=(nombre[i], apellido[i]))    
+        
     def fBuscar(self):
 
         id = self.txtID.get()
@@ -107,12 +100,11 @@ class VentanaEstudiante(Frame):
         lastName = self.txtlastName.get()
         lastName = lastName.upper()
         cnct.insert_student(id,name,lastName)
-        cnct.guardar_datos_txt(id,name,lastName)
-        self.grid.insert("", 0, text=id, values=(name, lastName))
-        self.txtID.delete(0, END)
-        self.txtName.delete(0, END)
-        self.txtlastName.delete(0, END)
-        self.txtID.focus()
+        self.grid.delete(*self.grid.get_children())
+        self.fMostrarDatos()
+        
+        #tabla
+        
         
 
     
