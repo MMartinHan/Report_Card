@@ -91,4 +91,22 @@ def recuperar_idEstudiante():
         id_est.append(item["id"])
     return id_est
 
+def actualizar_notas():
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    id_not = []
+    estuadiante_id = []
+    materia_nrc = []
+    nota_valor = []
+    nota_descripcion = []
+    numero_parcial = []
+    for item  in supabase.table("notas").select("*").execute().data:
+        id_not.append(item["id_not"])
+        estuadiante_id.append(item["estudiante_id"])
+        materia_nrc.append(item["materia_nrc"])
+        nota_valor.append(item["nota_valor"])
+        nota_descripcion.append(item["nota_descripcion"])
+        numero_parcial.append(item["numero_parcial"])
+    return id_not,estuadiante_id,materia_nrc,nota_valor,nota_descripcion,numero_parcial
     

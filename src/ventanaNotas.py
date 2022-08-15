@@ -15,6 +15,7 @@ class VentanaNotas(Frame):
         super().__init__(master,width=900,height=350)
         self.imagen()
         self.createwidgets()
+        self.fMostrar()
         self.master = master
         self.pack()
         
@@ -86,22 +87,27 @@ class VentanaNotas(Frame):
         
         self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5"))        
         self.grid.column("#0",width=50)
-        self.grid.column("col1",width=60, anchor=CENTER)
+        self.grid.column("col1",width=90, anchor=CENTER)
         self.grid.column("col2",width=90, anchor=CENTER)
         self.grid.column("col3",width=90, anchor=CENTER)
-        self.grid.column("col4",width=90, anchor=CENTER)   
-        self.grid.column("col5",width=150, anchor=CENTER)  
-        self.grid.heading("#0", text="ID.N.", anchor=CENTER)
-        self.grid.heading("col1", text="ID.E.", anchor=CENTER)
-        self.grid.heading("col2", text="NRC.M.", anchor=CENTER)
-        self.grid.heading("col3", text="PARCIAL", anchor=CENTER)
-        self.grid.heading("col4", text="NOTA.VALOR", anchor=CENTER)
-        self.grid.heading("col5", text="DESCRIPCION", anchor=CENTER)     
+        self.grid.column("col4",width=110, anchor=CENTER)   
+        self.grid.column("col5",width=60, anchor=CENTER)  
+        self.grid.heading("#0", text="ID NOTA", anchor=CENTER)
+        self.grid.heading("col1", text="ID ESTUDIANTE", anchor=CENTER)
+        self.grid.heading("col2", text="NRC MATERIA", anchor=CENTER)
+        self.grid.heading("col3", text="NOTA VALOR", anchor=CENTER)
+        self.grid.heading("col4", text="DESCRIPCION", anchor=CENTER)
+        self.grid.heading("col5", text="PARCIAL", anchor=CENTER)     
         self.grid.place(x=250,y=0,width=600, height=250)
         
 
     def fNuevo(self):         
         pass
+    
+    def fMostrar(self):
+        id_not,estudiante_id,materia_nrc,nota_valor,nota_descripcion,numero_parcial = cnct.actualizar_notas()
+        for i in range(len(id_not)):
+            self.grid.insert("",0,text=id_not[i],values=(estudiante_id[i],materia_nrc[i],nota_valor[i],nota_descripcion[i],numero_parcial[i]))
     
     def fGuardar(self):
         Id_Nota = self.txtIDnota.get()
@@ -115,14 +121,14 @@ class VentanaNotas(Frame):
         cnct.insert_nota(Id_Nota,Id_Estudiante,nrc,Nota_Valor,Nota_Descripcion,Parcial)
         
         #TABLA
-        self.grid.insert("", 0, text=Id_Nota, values=(Id_Estudiante,nrc,Parcial,Nota_Valor,Nota_Descripcion))
-        self.txtIDnota.set('')
-        self.cmbEstudiante.set('')
-        self.cmbNrc.set('')
-        self.cmbParcial.set('')
-        self.txtNota_Valor.set('')
-        self.txtNota_Descripcion.set('')
-        self.txtIDnota.focus()
+        self.grid.delete(*self.grid.get_children())
+        self.fMostrar()
+        self.txtIDnota.delete(0,END)
+        self.cmbEstudiante.set(' ')
+        self.cmbNrc.set(' ')
+        self.cmbParcial.set(' ')
+        self.txtNota_Valor.delete(0,END)
+        self.comboNota_Descripcion.set(' ')
 
     def fRegresar(self):
         self.master.destroy()
