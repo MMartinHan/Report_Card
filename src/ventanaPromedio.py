@@ -8,7 +8,6 @@ import conection as cnct
 
 class VentanaPromedio(Frame):
 
-
     def __init__(self, master=None):
         super().__init__(master,width=700,height=300)
         self.imagen()
@@ -18,7 +17,7 @@ class VentanaPromedio(Frame):
         
 
     def imagen(self):
-        img1 = Image.open("espe.png")
+        img1 = Image.open("img/espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -75,10 +74,8 @@ class VentanaPromedio(Frame):
             pass
     
     def fResetear(self):
-        self.cmbIDEstudiante.set(' ')
-        self.cmbNrc.clear(' ')
-        self.cmbParcial.clear(' ')
-          
+        self.grid.destroy()
+
 
 
 
@@ -97,6 +94,8 @@ class VentanaPromedio(Frame):
         lista_notas = cnct.obtener_notas_parcial(self.cmbIDEstudiante.get(),self.cmbNrc.get(),self.cmbParcial.get())
         nota_parcial = cnct.calculo_promedio_parcial(lista_notas)
         self.grid.insert("",1,text=self.cmbIDEstudiante.get(), values=(self.cmbNrc.get(),self.cmbParcial.get(),nota_parcial))
+        self.grid.tag_configure("default", background="black", foreground="white")
+        
         
 
     def mostrar_idEstudiante_nrc(self):
