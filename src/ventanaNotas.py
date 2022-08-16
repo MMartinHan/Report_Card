@@ -3,6 +3,7 @@ from tkinter import ttk
 import tkinter
 import tkinter as tk
 from tkinter import messagebox
+from unicodedata import decimal
 from PIL import Image, ImageTk
 from numpy import place
 import ventana as vnt
@@ -121,28 +122,27 @@ class VentanaNotas(Frame):
         Nota_Descripcion = self.comboNota_Descripcion.get()
 
         #validacion de campos vacios
-        if Id_Nota == "" or Id_Estudiante == "" or nrc == "" or Parcial == "" or Nota_Valor == "" or Nota_Descripcion == "" or Id_Nota.isdigit() == False :
+        if Id_Nota == "" or Id_Estudiante == "" or nrc == "" or Parcial == "" or Nota_Valor == "" or Nota_Descripcion == "" or Nota_Valor.isdecimal() == True or Nota_Valor.isalpha() == True or float(Nota_Valor) > 20 or float(Nota_Valor) < 0:
             messagebox.showinfo("Error","Faltan campos por llenar o un campo no es valido")
         else:
             try:
                 if cnct.buscar_id_nota(Id_Nota) == True:
                     messagebox.showinfo("Error","El ID de la nota ya existe")   
                 else: 
-                    if Nota_Valor.isdigit() == False or int(Nota_Valor) < 0 or int(Nota_Valor) > 20:
-                        messagebox.showinfo("Error","El valor de la nota no es valido")
-                    else:
-                        cnct.insert_nota(Id_Nota,Id_Estudiante,nrc,Nota_Valor,Nota_Descripcion,Parcial)
-                        #TABLA
-                        self.grid.delete(*self.grid.get_children())
-                        self.fMostrar()
-                        self.txtIDnota.delete(0,END)
-                        self.cmbEstudiante.set(' ')
-                        self.cmbNrc.set(' ')
-                        self.cmbParcial.set(' ')
-                        self.txtNota_Valor.delete(0,END)
-                        self.comboNota_Descripcion.set(' ')
-                        self.txtIDnota.focus()
-                    pass
+                    #validar que el nota valor no sea mayor a 20 ni menor a 0
+                    cnct.insert_nota(Id_Nota,Id_Estudiante,nrc,Nota_Valor,Nota_Descripcion,Parcial)
+                    #TABLA
+                    self.grid.delete(*self.grid.get_children())
+
+                    self.fMostrar()
+                    self.txtIDnota.delete(0,END)
+                    self.cmbEstudiante.set(' ')
+                    self.cmbNrc.set(' ')
+                    self.cmbParcial.set(' ')
+                    self.txtNota_Valor.delete(0,END)
+                    self.comboNota_Descripcion.set(' ')
+                    self.txtIDnota.focus()
+                
             except Exception as e:
                 messagebox.showinfo("Error", "El id ya existe")
 
@@ -162,7 +162,7 @@ class VentanaNotas(Frame):
         Nota_Valor = self.txtNota_Valor.get()
         Nota_Descripcion = self.comboNota_Descripcion.get()
 
-        if Nota_Valor.isdigit() == False or int(Nota_Valor) < 0.00 or int(Nota_Valor) > 20.00:
+        if Nota_Valor.isdecimal() == True or Nota_Valor.isalpha() == True or float(Nota_Valor) < 0 or float(Nota_Valor) > 20:
             messagebox.showinfo("Error","El valor de la nota no es valido")
         else:
             cnct.modificar_nota(Id_Nota,nrc,Nota_Valor,Nota_Descripcion,Parcial)
