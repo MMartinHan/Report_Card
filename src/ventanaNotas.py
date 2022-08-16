@@ -22,7 +22,7 @@ class VentanaNotas(Frame):
         
 
     def imagen(self):
-        img1 = Image.open("espe.png")
+        img1 = Image.open("img/espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -69,7 +69,7 @@ class VentanaNotas(Frame):
 
         lbl6 = Label(frame2,text="NOTA_DESCRIPCION ")
         lbl6.place(x=10,y=255)        
-        self.comboNota_Descripcion=ttk.Combobox(frame2,width=20,state="readonly",justify=CENTER,values=['FORO','PRUEBA_INTERMEDIA','TAREA','PRUEBA_CONJUNTA','LABORATORIO','TRABAJO_GRUPAL','EXAMEN_FINAL'])      
+        self.comboNota_Descripcion=ttk.Combobox(frame2,width=20,state="readonly",justify=CENTER,values=['FORO','PRUEBA_INTERMEDIA','TAREA','PRUEBA_CONJUNTA','LABORATORIO','TRABAJO_GRUPAL'])      
         self.comboNota_Descripcion.place(x=25,y=280,width=140, height=20)
 
 

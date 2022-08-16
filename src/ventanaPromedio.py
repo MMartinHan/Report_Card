@@ -18,7 +18,7 @@ class VentanaPromedio(Frame):
         
 
     def imagen(self):
-        img1 = Image.open("espe.png")
+        img1 = Image.open("img/espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -48,7 +48,8 @@ class VentanaPromedio(Frame):
         self.cmbParcial.place(x=370,y=230,width=80, height=20)    
 
 
-        self.btnBuscar = Button(text="Buscar",command=self.mostrardatos_Parcial, width=80 , height=50 , bg="Blue", fg="white")
+        self.btnBuscar = Button(text="Buscar",command=self.boton_mostrar, width=80 , height=50 , bg="Blue", fg="white")
+        
         self.btnBuscar.place(x=500,y=200,width=80, height=50)
         self.btnRegresar=Button(text="Regresar", command=self.fRegresar)
         self.btnRegresar.place(x=605,y=410,width=80, height=30)
@@ -56,6 +57,21 @@ class VentanaPromedio(Frame):
         
     def fBuscar(self):
         pass
+
+    def boton_mostrar(self):
+        bandera_stu, bandera_nrc, bandera_par = self.comprovar_campo()
+        if bandera_stu == True and bandera_nrc == False and bandera_par == False:
+            self.btnBuscar.config(command=self.mostrardatos_IdEstudiante)
+        elif bandera_stu == False and bandera_nrc == False and bandera_par == True:
+            self.btnBuscar.config(command=self.mostrardatos_Parcial)
+        elif bandera_stu == True and bandera_nrc == True and bandera_par == False:
+            self.btnBuscar.config(command=self.mostrardatos_IdEstudianteNrc)
+        elif bandera_stu == True and bandera_nrc == False and bandera_par == True:
+            self.btnBuscar.config(command=self.mostrardatos_IdEstudianteParcial)
+        elif bandera_stu == True and bandera_nrc == True and bandera_par == True:
+            self.btnBuscar.config(command=self.mostrardatos_IdEstudianteNrcParcial)
+        else:
+            pass
 
     def fRegresar(self):
         self.master.destroy()
@@ -74,10 +90,23 @@ class VentanaPromedio(Frame):
         self.grid.heading("col2", text="NOTA FINAL", anchor=CENTER)
         self.grid.place(x=125,y=120,width=420, height=150)
 
-        id_estudiante,nrc,nota_final=cnct.buscar_notas_IDEsudiante(self.cmbIDEstudiante.get())
-        for i in range(len(id_estudiante)):
-            self.grid.insert("",i,text=id_estudiante[i], values=(nrc[i],nota_final[i]))
-        pass
+        nota_final = []
+        nota_final1 = cnct.obtener_promedio_final(self.cmbIDEstudiante.get(),7167)
+        nota_final2 = cnct.obtener_promedio_final(self.cmbIDEstudiante.get(),7169)
+        nota_final3 = cnct.obtener_promedio_final(self.cmbIDEstudiante.get(),7450)
+        nota_final4 = cnct.obtener_promedio_final(self.cmbIDEstudiante.get(),7454)
+        nota_final5 = cnct.obtener_promedio_final(self.cmbIDEstudiante.get(),7543)
+        nota_final6 = cnct.obtener_promedio_final(self.cmbIDEstudiante.get(),8634)
+        nota_final.append(nota_final1)
+        nota_final.append(nota_final2)
+        nota_final.append(nota_final3)
+        nota_final.append(nota_final4)
+        nota_final.append(nota_final5)
+        nota_final.append(nota_final6)
+        
+        list_nrc = cnct.obtener_nrc()
+        for i in range(len(list_nrc)):
+            self.grid.insert("",i,text=self.cmbIDEstudiante.get(), values=(list_nrc[i],nota_final[i]))
 
     def mostrardatos_Nrc(self):
         pass
@@ -99,5 +128,15 @@ class VentanaPromedio(Frame):
         for i in range(len(id_estudiante)):
             self.grid.insert("",0,text=id_estudiante[i], values=(nrc[i],nota_valor[i],descripcion[i]))
         
+    def comprovar_campo(self):
+        idEstudiante = self.cmbIDEstudiante.get()
+        bandera_stu = bool(idEstudiante)
+        nrc = self.cmbNrc.get()
+        bandera_nrc = bool(nrc)
+        parcial = self.cmbParcial.get()
+        bandera_par = bool(parcial)
+        return bandera_stu, bandera_nrc, bandera_par
+        
+        
 
-   
+    
