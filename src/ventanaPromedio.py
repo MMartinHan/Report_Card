@@ -8,7 +8,6 @@ import conection as cnct
 
 class VentanaPromedio(Frame):
 
-
     def __init__(self, master=None):
         super().__init__(master,width=700,height=300)
         self.imagen()
@@ -75,10 +74,8 @@ class VentanaPromedio(Frame):
             pass
     
     def fResetear(self):
-        self.cmbIDEstudiante.set(' ')
-        self.cmbNrc.clear(' ')
-        self.cmbParcial.clear(' ')
-          
+        self.grid.destroy()
+
 
 
 
@@ -97,20 +94,28 @@ class VentanaPromedio(Frame):
         lista_notas = cnct.obtener_notas_parcial(self.cmbIDEstudiante.get(),self.cmbNrc.get(),self.cmbParcial.get())
         nota_parcial = cnct.calculo_promedio_parcial(lista_notas)
         self.grid.insert("",1,text=self.cmbIDEstudiante.get(), values=(self.cmbNrc.get(),self.cmbParcial.get(),nota_parcial))
+        self.grid.tag_configure("default", background="black", foreground="white")
+        
         
 
     def mostrar_idEstudiante_nrc(self):
-        self.grid = ttk.Treeview(self, columns=("col1","col2"))
+        self.grid = ttk.Treeview(self, columns=("col1","col2","col3"))
         self.grid.column("#0",width=50)
         self.grid.column("col1",width=60, anchor=CENTER)
         self.grid.column("col2",width=90, anchor=CENTER)
+        self.grid.column("col3",width=90, anchor=CENTER)
         self.grid.heading("#0", text="ID ESTUDIANTE", anchor=CENTER)
         self.grid.heading("col1", text="NRC", anchor=CENTER)
         self.grid.heading("col2", text="NOTA FINAL", anchor=CENTER)
+        self.grid.heading("col3", text="ESTADO", anchor=CENTER)
+
         self.grid.place(x=125,y=120,width=420, height=150)
         
         nota_final = cnct.obtener_promedio_final(self.cmbIDEstudiante.get(),self.cmbNrc.get())
-        self.grid.insert("",1,text=self.cmbIDEstudiante.get(),values=(self.cmbNrc.get(),nota_final))
+        if nota_final > 14.00:
+            self.grid.insert("",1,text=self.cmbIDEstudiante.get(),values=(self.cmbNrc.get(),nota_final,"APROBADO"))
+        else:
+            self.grid.insert("",1,text=self.cmbIDEstudiante.get(),values=(self.cmbNrc.get(),nota_final,"REPROBADO"))
 
     def fRegresar(self):
         self.master.destroy()
@@ -120,13 +125,16 @@ class VentanaPromedio(Frame):
         root.mainloop()
 
     def mostrardatos_IdEstudiante(self):
-        self.grid = ttk.Treeview(self, columns=("col1","col2"))        
+        self.grid = ttk.Treeview(self, columns=("col1","col2","col3"))        
         self.grid.column("#0",width=50)
         self.grid.column("col1",width=60, anchor=CENTER)
         self.grid.column("col2",width=90, anchor=CENTER)
+        self.grid.column("col3",width=90, anchor=CENTER)
         self.grid.heading("#0", text="ID ESTUDIANTE", anchor=CENTER)
         self.grid.heading("col1", text="NRC", anchor=CENTER)
         self.grid.heading("col2", text="NOTA FINAL", anchor=CENTER)
+        self.grid.heading("col3", text="ESTADO", anchor=CENTER)
+
         self.grid.place(x=125,y=120,width=420, height=150)
 
         nota_final = []
@@ -145,7 +153,11 @@ class VentanaPromedio(Frame):
         
         list_nrc = cnct.obtener_nrc()
         for i in range(len(list_nrc)):
-            self.grid.insert("",i,text=self.cmbIDEstudiante.get(), values=(list_nrc[i],nota_final[i]))
+            if nota_final[i] > 14.00:
+                self.grid.insert("",1,text=self.cmbIDEstudiante.get(),values=(list_nrc[i],nota_final[i],"APROBADO"))
+            else:
+                self.grid.insert("",1,text=self.cmbIDEstudiante.get(),values=(list_nrc[i],nota_final[i],"REPROBADO"))
+            
 
     def mostrardatos_Nrc(self):
         pass
