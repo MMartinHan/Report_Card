@@ -1,1 +1,1 @@
-from ventana import *
+self.cmbNrc=ttk.Combobox(frame2,width=10,state="readonly",values=lista_nrc, justify=CENTER)

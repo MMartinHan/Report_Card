@@ -21,7 +21,7 @@ class VentanaNotas(Frame):
         
 
     def imagen(self):
-        img1 = Image.open("img/espe.png")
+        img1 = Image.open("espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -40,6 +40,8 @@ class VentanaNotas(Frame):
 
         lbl2 = Label(frame2,text="ID.ESTUDIANTE ")
         lbl2.place(x=10,y=55)
+        list_ste = cnct.recuperar_idEstudinte()       
+        self.cmbEstudiante = ttk.Combobox(frame2,state="readonly",values=list_ste, justify=CENTER)
         list_ste=cnct.recuperar_idEstudiante()        
         self.cmbEstudiante = ttk.Combobox(frame2,width=10,state="readonly",values=list_ste, justify=CENTER)
         self.cmbEstudiante.place(x=25,y=75,width=140, height=20)  
@@ -77,11 +79,11 @@ class VentanaNotas(Frame):
         self.btnRegresar=Button(frame2,text="Regresar", command=self.fRegresar, bg="green", fg="white")
         self.btnRegresar.place(x=155,y=315,width=60, height=30)   
         
-        self.btnNuevo=Button(text="Buscar", bg="blue", fg="white")
+        self.btnNuevo=Button(text="Buscar",command=self.fBuscar, bg="blue", fg="white")
         self.btnNuevo.place(x=400,y=425,width=80, height=30 )        
-        self.btnModificar=Button(text="Modificar", bg="blue", fg="white")
+        self.btnModificar=Button(text="Modificar",command=self.fModificar, bg="blue", fg="white")
         self.btnModificar.place(x=500,y=425,width=80, height=30)                
-        self.btnEliminar=Button(text="Eliminar", bg="blue", fg="white")
+        self.btnEliminar=Button(text="Eliminar",command=self.fEliminar, bg="blue", fg="white")
         self.btnEliminar.place(x=600,y=425,width=80, height=30)   
         
         
@@ -129,6 +131,8 @@ class VentanaNotas(Frame):
         self.cmbParcial.set(' ')
         self.txtNota_Valor.delete(0,END)
         self.comboNota_Descripcion.set(' ')
+        self.txtIDnota.focus()
+
 
     def fRegresar(self):
         self.master.destroy()
@@ -137,25 +141,78 @@ class VentanaNotas(Frame):
         vnt.Ventana(root)
         root.mainloop()
     
-    def fModificar(self):        
-        pass
     
+
+    def fModificar(self):
+        Id_Nota = self.txtIDnota.get()
+        nrc = self.cmbNrc.get()
+        Parcial = self.cmbParcial.get()
+        Nota_Valor = self.txtNota_Valor.get()
+        Nota_Descripcion = self.comboNota_Descripcion.get()
+
+        cnct.modificar_nota(Id_Nota,nrc,Nota_Valor,Nota_Descripcion,Parcial)
+        self.grid.delete(*self.grid.get_children())
+        self.fMostrar()
+        self.txtIDnota.delete(0,END)
+        self.cmbEstudiante.set(' ')
+        self.cmbNrc.set(' ')
+        self.cmbParcial.set(' ')
+        self.txtNota_Valor.delete(0,END)
+        self.comboNota_Descripcion.set(' ')
+        self.txtIDnota.focus()
+
+    def fBuscar(self):
+        id_Estudiante : int
+        nrc: int
+        nota : int
+        nota_descripcion : str
+        parcial : int
+        Id_Nota = self.txtIDnota.get()
+
+        id_Estudiante = cnct.buscar_idEstudiante(Id_Nota)
+        self.cmbEstudiante.set(id_Estudiante)
+        nrc = cnct.buscar_nrc(Id_Nota)
+        self.cmbNrc.set(nrc)
+        
+        nota = cnct.buscar_notaValor(Id_Nota)
+        self.txtNota_Valor.insert(0,nota)
+
+        nota_descripcion = cnct.buscar_notaDescripcion(Id_Nota)
+        self.comboNota_Descripcion.set(nota_descripcion)
+        parcial = cnct.buscar_parcial(Id_Nota)
+        self.cmbParcial.set(parcial)
+        
     def fEliminar(self):
-        pass
+        Id_Nota = self.txtIDnota.get()
+        cnct.eliminar_nota(Id_Nota)
+        self.grid.delete(*self.grid.get_children())
+        self.fMostrar()
+        self.txtIDnota.delete(0,END)
+        self.cmbEstudiante.set(' ')
+        self.cmbNrc.set(' ')
+        self.txtNota_Valor.delete(0,END)
+        self.cmbParcial.set(' ')
+        self.comboNota_Descripcion.set(' ')
+        self.txtIDnota.focus()
+        
 
     def fCancelar(self):
         Id_Nota = self.txtIDnota.get()
-        Id_Estudiante = self.txtIDestudiante.get()
-        NRC_Materia = self.txtNRC.get()
-        Parcial = self.txtParcial.get()
+        Id_Estudiante = self.cmbEstudiante.get()
         Nota_Valor = self.txtNota_Valor.get()
-        Nota_Descripcion = self.txtNota_Descripcion.get()
+        self.txtIDnota.delete(0,END)
+        self.cmbEstudiante.set(' ')
+        self.cmbNrc.set(' ')
+        self.txtNota_Valor.delete(0,END)
+        self.cmbParcial.set(' ')
+        self.comboNota_Descripcion.set(' ')
+        Nota_Descripcion = self.comboNota_Descripcion.get()
         self.txtIDnota.set('')
-        self.txtIDestudiante.set('')
-        self.txtNRC.set('')
-        self.txtParcial.set('')
+        self.cmbEstudiante.set('')
+        self.cmbNrc.set('')
+        self.cmbParcial.set('')
         self.txtNota_Valor.set('')
-        self.txtNota_Descripcion.set('')
+        self.comboNota_Descripcion.set('')
         self.txtIDnota.focus()
 
     

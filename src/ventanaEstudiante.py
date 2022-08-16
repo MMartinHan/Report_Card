@@ -22,7 +22,7 @@ class VentanaEstudiante(Frame):
 
 
     def imagen(self):
-        img1 = Image.open("img/espe.png")
+        img1 = Image.open("espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -76,9 +76,7 @@ class VentanaEstudiante(Frame):
         vnt.Ventana(root)
         root.mainloop()
 
-    def fNuevo(self):
-        pass
-
+  
     def fMostrarDatos(self):
         id,nombre,apellido = cnct.actualizar()
         for i in range(len(id)):
@@ -101,13 +99,13 @@ class VentanaEstudiante(Frame):
         lastName = lastName.upper()
         cnct.insert_student(id,name,lastName)
         self.grid.delete(*self.grid.get_children())
+        self.textID.delete(0, END)
+        self.textName.delete(0, END)
+        self.textlastName.delete(0, END)
         self.fMostrarDatos()
         
         #tabla
-        
-        
 
-    
     def fModificar(self):  
         id = self.txtID.get()
         name = self.txtName.get()
@@ -115,17 +113,24 @@ class VentanaEstudiante(Frame):
         lastName = self.txtlastName.get()
         lastName = lastName.upper()
         cnct.modificar_estudiante(id,name,lastName)
-        self.grid.insert("", 0, text=id, values=(name, lastName))
+        self.grid.delete(*self.grid.get_children())
         self.txtID.delete(0, END)
         self.txtName.delete(0, END)
         self.txtlastName.delete(0, END)
+        self.fMostrarDatos()
         self.txtID.focus()      
         
     
     def fEliminar(self):
         id = self.txtID.get()
         cnct.eliminar_estudiante(id)
-        pass
+        self.txtID.delete(0, END)
+        self.txtName.delete(0, END)
+        self.txtlastName.delete(0, END)
+        self.txtID.focus()
+        self.grid.delete(*self.grid.get_children())
+        self.fMostrarDatos()
+        
 
     def fCancelar(self):
         id = self.txtID.get()
