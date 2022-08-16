@@ -109,4 +109,48 @@ def actualizar_notas():
         nota_descripcion.append(item["nota_descripcion"])
         numero_parcial.append(item["numero_parcial"])
     return id_not,estuadiante_id,materia_nrc,nota_valor,nota_descripcion,numero_parcial
+
+def obtener_notas_parcial(id_est: str,nrc: int, parcial: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    nota = []
+    for item  in supabase.table("notas").select("*").eq("estudiante_id",id_est).eq("materia_nrc",nrc).eq("numero_parcial",parcial).execute().data:
+        nota.append(item["nota_valor"])
+    return nota
+
+def obtener_promedio_final(id_est: str, nrc: int):
+    lista_promedio = []
+    parcial1 = obtener_notas_parcial(id_est,nrc,1)
+    promedio1 = calculo_promedio_parcial(parcial1)
+    parcial2 = obtener_notas_parcial(id_est,nrc,2)
+    promedio2 = calculo_promedio_parcial(parcial2)
+    parcial3 = obtener_notas_parcial(id_est,nrc,3)
+    promedio3 = calculo_promedio_parcial(parcial3)
+    lista_promedio.append(promedio1)
+    lista_promedio.append(promedio2)
+    lista_promedio.append(promedio3)
+    calculo_promedio_final = calculo_promedio_final(lista_promedio)
+    return calculo_promedio_final
+
+
+def calculo_promedio_parcial(list_notas: list):
+    suma = 0
+    for item in list_notas:
+        suma += item
+    promedio = suma/6
+    return promedio
+
+def calculo_promedio_final(list_notas: list):
+    suma = 0
+    for item in list_notas:
+        suma += item
+    promedio = suma/3
+    return promedio
+
+def obtener_nombre():
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
     
+
