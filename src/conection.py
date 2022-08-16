@@ -232,7 +232,6 @@ def buscar_notas_Parcial(parcial : int):
         valor.append(item["nota_valor"])
     return estudiante_id,nrc_materia,descripcion,valor
 
-<<<<<<< HEAD
 def buscar_notas_IDEsudiante(idEstudiante: int):
     estudiante_id = []
     nrc_materia = []
@@ -259,7 +258,17 @@ def buscar_id_nota(idNota: int):
     supabase: Client = create_client(url, key)
     for item in supabase.table('notas').select('*').eq('id_not',idNota).execute().data:
         return item["id_not"]
-=======
 
+def buscar_IdEstudiante_Parcial(idEstudiante : int , parcial : int):
+    estudiante_id = []
+    nota = []
+    descripcion = []
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    for item in supabase.table('notas').select('*').eq('estudiante_id',idEstudiante).eq('numero_parcial',parcial).execute().data:
+        estudiante_id.append(item["estudiante_id"])
+        nota.append(item["nota_valor"])
+        descripcion.append(item["nota_descripcion"])
+    return estudiante_id,nota,descripcion
 
->>>>>>> 213f90315bdb41bdd77cbd86742d6e4218609ae9

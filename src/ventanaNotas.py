@@ -22,7 +22,7 @@ class VentanaNotas(Frame):
         
 
     def imagen(self):
-        img1 = Image.open("img/espe.png")
+        img1 = Image.open("espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -155,7 +155,6 @@ class VentanaNotas(Frame):
         root.mainloop()
     
     
-
     def fModificar(self):
         Id_Nota = self.txtIDnota.get()
         nrc = self.cmbNrc.get()
@@ -163,7 +162,7 @@ class VentanaNotas(Frame):
         Nota_Valor = self.txtNota_Valor.get()
         Nota_Descripcion = self.comboNota_Descripcion.get()
 
-        if Nota_Valor.isdigit() == False or int(Nota_Valor) < 0 or int(Nota_Valor) > 20:
+        if Nota_Valor.isdigit() == False or int(Nota_Valor) < 0.00 or int(Nota_Valor) > 20.00:
             messagebox.showinfo("Error","El valor de la nota no es valido")
         else:
             cnct.modificar_nota(Id_Nota,nrc,Nota_Valor,Nota_Descripcion,Parcial)

@@ -18,7 +18,7 @@ class VentanaPromedio(Frame):
         
 
     def imagen(self):
-        img1 = Image.open("img/espe.png")
+        img1 = Image.open("espe.png")
         img1 = img1.resize((520,150))
         img2 = ImageTk.PhotoImage(img1)
         label1 = Label(image=img2)
@@ -49,8 +49,9 @@ class VentanaPromedio(Frame):
 
 
         self.btnBuscar = Button(text="Buscar",command=self.boton_mostrar, width=80 , height=50 , bg="Blue", fg="white")
-        
         self.btnBuscar.place(x=500,y=200,width=80, height=50)
+        self.btnBorrar = Button(text="Borrar",command=self.fResetear, width=80 , height=50 , bg="Blue", fg="white")
+        self.btnBorrar.place(x=600,y=200,width=80, height=50)
         self.btnRegresar=Button(text="Regresar", command=self.fRegresar)
         self.btnRegresar.place(x=605,y=410,width=80, height=30)
 
@@ -67,11 +68,19 @@ class VentanaPromedio(Frame):
         elif bandera_stu == True and bandera_nrc == True and bandera_par == False:
             self.btnBuscar.config(command=self.mostrardatos_IdEstudianteNrc)
         elif bandera_stu == True and bandera_nrc == False and bandera_par == True:
-            self.btnBuscar.config(command=self.mostrardatos_IdEstudianteParcial)
+            self.btnBuscar.config(command=self.estudianteParcial)
         elif bandera_stu == True and bandera_nrc == True and bandera_par == True:
             self.btnBuscar.config(command=self.mostrardatos_IdEstudianteNrcParcial)
         else:
             pass
+    
+    def fResetear(self):
+        self.cmbIDEstudiante.set(' ')
+        self.cmbNrc.clear(' ')
+        self.cmbParcial.clear(' ')
+          
+
+
 
     def fRegresar(self):
         self.master.destroy()
@@ -111,6 +120,7 @@ class VentanaPromedio(Frame):
     def mostrardatos_Nrc(self):
         pass
 
+    
 
     def mostrardatos_Parcial(self):
         self.grid = ttk.Treeview(self, columns=("col1","col2","col3"))        
@@ -128,6 +138,22 @@ class VentanaPromedio(Frame):
         for i in range(len(id_estudiante)):
             self.grid.insert("",0,text=id_estudiante[i], values=(nrc[i],nota_valor[i],descripcion[i]))
         
+
+    def estudianteParcial(self):
+        self.grid = ttk.Treeview(self, columns=("col1","col2"))        
+        self.grid.column("#0",width=50)
+        self.grid.column("col1",width=60, anchor=CENTER)
+        self.grid.column("col2",width=90, anchor=CENTER)
+        self.grid.heading("#0", text="ID ESTUDIANTE", anchor=CENTER)
+        self.grid.heading("col1", text="NOTA", anchor=CENTER)
+        self.grid.heading("col2", text="DESCRIPCION", anchor=CENTER)
+        self.grid.place(x=125,y=120,width=420, height=150)
+
+        id_estudiante , descripcion, nota = cnct.buscar_IdEstudiante_Parcial(self.cmbIDEstudiante.get(),self.cmbParcial.get())
+        for i in range(len(id_estudiante)):
+            self.grid.insert("",0,text=id_estudiante[i], values=(descripcion[i],nota[i]))
+
+
     def comprovar_campo(self):
         idEstudiante = self.cmbIDEstudiante.get()
         bandera_stu = bool(idEstudiante)
