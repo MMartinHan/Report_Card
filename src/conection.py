@@ -20,10 +20,6 @@ def obtener_nrc():
     data = supabase.table("materia").select("nrc").execute().json()
     data = re.findall('[0-9]+',data)
     return data
-<<<<<<< HEAD
-=======
-
->>>>>>> 6c5c475dd2b3cc4ff82ce607faa4bfbe281640c4
 
 def guardar_datos_txt(id: int, first_name: str, last_name: str):
     archivo = open("estudiante.txt","w")
@@ -70,7 +66,6 @@ def eliminar_estudiante(id: int):
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     supabase.table('estudiante').delete().eq("id",id).execute()
-<<<<<<< HEAD
 
 
 def modificar_nota(idNota : int ,nrc: int, nota: float, descripcion: str, parcial: int):
@@ -78,7 +73,6 @@ def modificar_nota(idNota : int ,nrc: int, nota: float, descripcion: str, parcia
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     supabase.table('notas').update({"id_not": idNota,"materia_nrc": nrc, "nota_valor": nota, "nota_descripcion": descripcion, "numero_parcial": parcial}).eq("id_not",idNota).execute() 
-=======
     
 
 def actualizar ():
@@ -121,7 +115,6 @@ def actualizar_notas():
         nota_descripcion.append(item["nota_descripcion"])
         numero_parcial.append(item["numero_parcial"])
     return id_not,estuadiante_id,materia_nrc,nota_valor,nota_descripcion,numero_parcial
->>>>>>> 6c5c475dd2b3cc4ff82ce607faa4bfbe281640c4
     
 def buscar_idEstudiante(id: int):
     url: str = config("SUPABASE_URL")
@@ -178,3 +171,32 @@ def eliminar_nota(id: int):
     key: str = config("SUPABASE_KEY")
     supabase: Client = create_client(url, key)
     supabase.table('notas').delete().eq("id_not",id).execute()
+
+
+def buscar_notas_Parcial(parcial : int):
+    estudiante_id = []
+    nrc_materia = []
+    descripcion = []
+    valor = []
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    for item in supabase.table('notas').select('*').eq('numero_parcial',parcial).execute().data:
+        estudiante_id.append(item["estudiante_id"])
+        nrc_materia.append(item["materia_nrc"])
+        descripcion.append(item["nota_descripcion"])
+        valor.append(item["nota_valor"])
+    return estudiante_id,nrc_materia,descripcion,valor
+
+def buscar_notas_IDEsudiante(idEstudiante: int):
+    estudiante_id = []
+    nrc_materia = []
+    nota_final = []
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    for item in supabase.table('notas').select('*').eq('estudiante_id',idEstudiante).execute().data:
+        estudiante_id.append(item["estudiante_id"])
+        nrc_materia.append(item["materia_nrc"])
+        nota_final.append(item["nota_valor"])
+    return estudiante_id,nrc_materia,nota_final
