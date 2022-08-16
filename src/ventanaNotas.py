@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter
 import tkinter as tk
+from tkinter import messagebox
 from PIL import Image, ImageTk
 from numpy import place
 import ventana as vnt
@@ -118,20 +119,32 @@ class VentanaNotas(Frame):
         Parcial = self.cmbParcial.get()
         Nota_Valor = self.txtNota_Valor.get()
         Nota_Descripcion = self.comboNota_Descripcion.get()
-        
-        #base de datos
-        cnct.insert_nota(Id_Nota,Id_Estudiante,nrc,Nota_Valor,Nota_Descripcion,Parcial)
-        
-        #TABLA
-        self.grid.delete(*self.grid.get_children())
-        self.fMostrar()
-        self.txtIDnota.delete(0,END)
-        self.cmbEstudiante.set(' ')
-        self.cmbNrc.set(' ')
-        self.cmbParcial.set(' ')
-        self.txtNota_Valor.delete(0,END)
-        self.comboNota_Descripcion.set(' ')
-        self.txtIDnota.focus()
+
+        #validacion de campos vacios
+        if Id_Nota == "" or Id_Estudiante == "" or nrc == "" or Parcial == "" or Nota_Valor == "" or Nota_Descripcion == "" or Id_Nota.isdigit() == False :
+            messagebox.showinfo("Error","Faltan campos por llenar o un campo no es valido")
+        else:
+            try:
+                if cnct.buscar_id_nota(Id_Nota) == True:
+                    messagebox.showinfo("Error","El ID de la nota ya existe")   
+                else: 
+                    if Nota_Valor.isdigit() == False or int(Nota_Valor) < 0 or int(Nota_Valor) > 20:
+                        messagebox.showinfo("Error","El valor de la nota no es valido")
+                    else:
+                        cnct.insert_nota(Id_Nota,Id_Estudiante,nrc,Nota_Valor,Nota_Descripcion,Parcial)
+                        #TABLA
+                        self.grid.delete(*self.grid.get_children())
+                        self.fMostrar()
+                        self.txtIDnota.delete(0,END)
+                        self.cmbEstudiante.set(' ')
+                        self.cmbNrc.set(' ')
+                        self.cmbParcial.set(' ')
+                        self.txtNota_Valor.delete(0,END)
+                        self.comboNota_Descripcion.set(' ')
+                        self.txtIDnota.focus()
+                    pass
+            except Exception as e:
+                messagebox.showinfo("Error", "El id ya existe")
 
 
     def fRegresar(self):
@@ -150,16 +163,19 @@ class VentanaNotas(Frame):
         Nota_Valor = self.txtNota_Valor.get()
         Nota_Descripcion = self.comboNota_Descripcion.get()
 
-        cnct.modificar_nota(Id_Nota,nrc,Nota_Valor,Nota_Descripcion,Parcial)
-        self.grid.delete(*self.grid.get_children())
-        self.fMostrar()
-        self.txtIDnota.delete(0,END)
-        self.cmbEstudiante.set(' ')
-        self.cmbNrc.set(' ')
-        self.cmbParcial.set(' ')
-        self.txtNota_Valor.delete(0,END)
-        self.comboNota_Descripcion.set(' ')
-        self.txtIDnota.focus()
+        if Nota_Valor.isdigit() == False or int(Nota_Valor) < 0 or int(Nota_Valor) > 20:
+            messagebox.showinfo("Error","El valor de la nota no es valido")
+        else:
+            cnct.modificar_nota(Id_Nota,nrc,Nota_Valor,Nota_Descripcion,Parcial)
+            self.grid.delete(*self.grid.get_children())
+            self.fMostrar()
+            self.txtIDnota.delete(0,END)
+            self.cmbEstudiante.set(' ')
+            self.cmbNrc.set(' ')
+            self.cmbParcial.set(' ')
+            self.txtNota_Valor.delete(0,END)
+            self.comboNota_Descripcion.set(' ')
+            self.txtIDnota.focus()
 
     def fBuscar(self):
         id_Estudiante : int
@@ -169,18 +185,27 @@ class VentanaNotas(Frame):
         parcial : int
         Id_Nota = self.txtIDnota.get()
 
-        id_Estudiante = cnct.buscar_idEstudiante(Id_Nota)
-        self.cmbEstudiante.set(id_Estudiante)
-        nrc = cnct.buscar_nrc(Id_Nota)
-        self.cmbNrc.set(nrc)
-        
-        nota = cnct.buscar_notaValor(Id_Nota)
-        self.txtNota_Valor.insert(0,nota)
+        if Id_Nota == "":
+            messagebox.showinfo("Error","El campo ID esta vacio")
+            self.txtID.focus()
+        else:
+            if cnct.buscar_id_nota(Id_Nota):
+                id_Estudiante = cnct.buscar_idEstudiante(Id_Nota)
+                self.cmbEstudiante.set(id_Estudiante)
+                nrc = cnct.buscar_nrc(Id_Nota)
+                self.cmbNrc.set(nrc)
+                
+                nota = cnct.buscar_notaValor(Id_Nota)
+                self.txtNota_Valor.insert(0,nota)
 
-        nota_descripcion = cnct.buscar_notaDescripcion(Id_Nota)
-        self.comboNota_Descripcion.set(nota_descripcion)
-        parcial = cnct.buscar_parcial(Id_Nota)
-        self.cmbParcial.set(parcial)
+                nota_descripcion = cnct.buscar_notaDescripcion(Id_Nota)
+                self.comboNota_Descripcion.set(nota_descripcion)
+                parcial = cnct.buscar_parcial(Id_Nota)
+                self.cmbParcial.set(parcial)
+            else:
+                messagebox.showinfo("Error","El ID no existe")
+                self.txtIDnota.delete(0,END)
+                self.txtIDnota.focus()
         
     def fEliminar(self):
         Id_Nota = self.txtIDnota.get()

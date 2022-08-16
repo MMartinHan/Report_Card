@@ -200,3 +200,17 @@ def buscar_notas_IDEsudiante(idEstudiante: int):
         nrc_materia.append(item["materia_nrc"])
         nota_final.append(item["nota_valor"])
     return estudiante_id,nrc_materia,nota_final
+
+def buscar_id_Estudiante(idEstudiante: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    for item in supabase.table('estudiante').select('*').eq('id',idEstudiante).execute().data:
+        return item["id"]
+
+def buscar_id_nota(idNota: int):
+    url: str = config("SUPABASE_URL")
+    key: str = config("SUPABASE_KEY")
+    supabase: Client = create_client(url, key)
+    for item in supabase.table('notas').select('*').eq('id_not',idNota).execute().data:
+        return item["id_not"]

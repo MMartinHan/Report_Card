@@ -1,6 +1,7 @@
 from logging import root
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 import tkinter
 from PIL import Image, ImageTk
 from numpy import place
@@ -86,10 +87,17 @@ class VentanaEstudiante(Frame):
 
         id = self.txtID.get()
         name : str
-        name = cnct.buscar_nombre(id)
-        self.txtName.insert(0, name)
-        lastName = cnct.buscar_apellido(id)
-        self.txtlastName.insert(0, lastName)       
+        if id == "":
+            messagebox.showinfo("Error","El campo ID esta vacio")
+            self.txtID.focus()
+        else:
+            if cnct.buscar_id_Estudiante(id):
+                name = cnct.buscar_nombre(id)    
+                self.txtName.insert(0, name)
+                lastName = cnct.buscar_apellido(id)
+                self.txtlastName.insert(0, lastName)  
+            else:
+                messagebox.showinfo("Error", "El id no existe")     
         
     def fGuardar(self):
         id = self.txtID.get()
@@ -97,13 +105,29 @@ class VentanaEstudiante(Frame):
         name = name.upper()
         lastName = self.txtlastName.get()
         lastName = lastName.upper()
-        cnct.insert_student(id,name,lastName)
-        self.grid.delete(*self.grid.get_children())
-        self.textID.delete(0, END)
-        self.textName.delete(0, END)
-        self.textlastName.delete(0, END)
-        self.fMostrarDatos()
-        
+    
+
+        if id == "" or name == "" or lastName == "":
+            messagebox.showinfo("Error", "Debe llenar todos los campos")
+        else:
+            try:
+                
+                if cnct.buscar_id_Estudiante(id) == True:
+                    messagebox.showinfo("Error", "El id ya existe")
+                else:
+                    #validar que el id tenga 4 digitos y una letra mayuscula
+                    if len(id) == 4 and id[0] == "L":
+                        cnct.insert_student(id,name,lastName)
+                        self.grid.delete(*self.grid.get_children())
+                        self.txtID.delete(0,END)
+                        self.txtName.delete(0,END)
+                        self.txtlastName.delete(0,END)
+                        self.fMostrarDatos()
+                    else:
+                        messagebox.showinfo("Error", "El id debe tener 4 digitos y una letra L mayuscula")
+            except Exception as e:
+                messagebox.showinfo("Error", "El id ya existe")
+                
         #tabla
 
     def fModificar(self):  
@@ -112,24 +136,31 @@ class VentanaEstudiante(Frame):
         name = name.upper()
         lastName = self.txtlastName.get()
         lastName = lastName.upper()
-        cnct.modificar_estudiante(id,name,lastName)
-        self.grid.delete(*self.grid.get_children())
-        self.txtID.delete(0, END)
-        self.txtName.delete(0, END)
-        self.txtlastName.delete(0, END)
-        self.fMostrarDatos()
-        self.txtID.focus()      
+        if id == "" or name == "" or lastName == "":
+            messagebox.showinfo("Error", "Campos vacios")
+        else:
+            cnct.modificar_estudiante(id,name,lastName)
+            self.grid.delete(*self.grid.get_children())
+            self.txtID.delete(0, END)
+            self.txtName.delete(0, END)
+            self.txtlastName.delete(0, END)
+            self.fMostrarDatos()
+            self.txtID.focus()      
+
         
     
     def fEliminar(self):
         id = self.txtID.get()
-        cnct.eliminar_estudiante(id)
-        self.txtID.delete(0, END)
-        self.txtName.delete(0, END)
-        self.txtlastName.delete(0, END)
-        self.txtID.focus()
-        self.grid.delete(*self.grid.get_children())
-        self.fMostrarDatos()
+        if id == "":
+            messagebox.showinfo("Error", "El campo ID esta vacio")
+        else:
+            cnct.eliminar_estudiante(id)
+            self.txtID.delete(0, END)
+            self.txtName.delete(0, END)
+            self.txtlastName.delete(0, END)
+            self.txtID.focus()
+            self.grid.delete(*self.grid.get_children())
+            self.fMostrarDatos()
         
 
     def fCancelar(self):
