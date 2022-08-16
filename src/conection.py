@@ -232,6 +232,10 @@ def buscar_notas_Parcial(parcial : int):
         valor.append(item["nota_valor"])
     return estudiante_id,nrc_materia,descripcion,valor
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6c86b32f03bc7c2e697a1fa85b85107429fe1e78
 def buscar_notas_IDEsudiante(idEstudiante: int):
     estudiante_id = []
     nrc_materia = []
@@ -272,3 +276,9 @@ def buscar_IdEstudiante_Parcial(idEstudiante : int , parcial : int):
         descripcion.append(item["nota_descripcion"])
     return estudiante_id,nota,descripcion
 
+<<<<<<< HEAD
+=======
+    
+    
+        
+>>>>>>> 6c86b32f03bc7c2e697a1fa85b85107429fe1e78
