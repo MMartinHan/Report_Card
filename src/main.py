@@ -13,9 +13,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-    promedio = cnct.obtener_promedio_final('L305',7167)
-    print(promedio)
     
     
 

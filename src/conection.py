@@ -136,8 +136,8 @@ def obtener_promedio_final(id_est: str, nrc: int):
     lista_promedio.append(promedio1)
     lista_promedio.append(promedio2)
     lista_promedio.append(promedio3)
-    calculo_promedio_final = calculo_promedio_final(lista_promedio)
-    return calculo_promedio_final
+    promedio_final = calculo_promedio_final(lista_promedio)
+    return promedio_final
 
 
 def calculo_promedio_parcial(list_notas: list):
@@ -232,16 +232,5 @@ def buscar_notas_Parcial(parcial : int):
         valor.append(item["nota_valor"])
     return estudiante_id,nrc_materia,descripcion,valor
 
-def buscar_notas_IDEsudiante(idEstudiante: int):
-    estudiante_id = []
-    nrc_materia = []
-    nota_final = []
-    url: str = config("SUPABASE_URL")
-    key: str = config("SUPABASE_KEY")
-    supabase: Client = create_client(url, key)
-    for item in supabase.table('notas').select('*').eq('estudiante_id',idEstudiante).execute().data:
-        estudiante_id.append(item["estudiante_id"])
-        nrc_materia.append(item["materia_nrc"])
-        nota_final.append(item["nota_valor"])
-    return estudiante_id,nrc_materia,nota_final
+
 
